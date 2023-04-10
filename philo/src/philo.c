@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/10 18:22:36 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/10 18:41:47 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ void	check_idle(t_prog *prog, t_philo *philo)
 
 void	check_eat(t_prog *prog, t_philo *philo)
 {
-	if (philo->last_meal_time >= prog->time_to_eat)
+	if (philo->last_meal_time >= prog->param.time_to_eat)
 	{
-		philo->state = SLEEPING;
+		philo->state = SLEEP;
 	}
-	if (philo->last_meal_time >= prog->time_to_die)
+	if (philo->last_meal_time >= prog->param.time_to_die)
 	{
 		philo->state = DEAD;
 	}
@@ -96,11 +96,11 @@ void	check_eat(t_prog *prog, t_philo *philo)
 
 void	check_sleep(t_prog *prog, t_philo *philo)
 {
-	if (philo->last_meal_time >= (prog->time_to_eat + prog->time_to_eat))
+	if (philo->last_meal_time >= (prog->param.time_to_eat + prog->param.time_to_eat))
 	{
 		philo->state = THINK;
 	}
-	if (philo->last_meal_time >= prog->time_to_die)
+	if (philo->last_meal_time >= prog->param.time_to_die)
 	{
 		philo->state = DEAD;
 	}
@@ -113,7 +113,7 @@ void	check_thinking(t_prog *prog, t_philo *philo)
 		pthread_mutex_lock(prog->forks[philo->id]);
 		if (prog->parity == philo->parity)
 		{
-			pthread_mutex_lock(prog->forks[(philo->id + 1) % prog->nb_philo]);
+			pthread_mutex_lock(prog->forks[(philo->id + 1) % prog->param.nb_philo]);
 			philo->last_meal_time = get_time_ms();
 			philo->state = EAT;
 		}
@@ -134,8 +134,8 @@ static void	(*g_check_state_philo[5])(t_prog*, t_philo*) = {
 
 void	philo(t_prog *prog, t_philo *philo)
 {
-	while (1)
+	while (prog->get_state(prog) != STOP)
 	{
-		g_check_state_philo()
+		g_check_state_philo[philo->get_state(philo)](prog, philo);
 	}
 }
