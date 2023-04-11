@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 10:26:52 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:19:28 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,16 @@ typedef enum e_state
 	EAT,
 	SLEEP,
 	THINK,
-	DEAD
+	DEAD,
+	ERROR
 }	t_state;
+
+typedef struct s_snap_philo
+{
+	uint64_t		last_time;
+	int32_t			nb_meal;
+	t_state			state;
+}	t_snap_philo;
 
 typedef struct s_philo
 {
@@ -33,15 +41,15 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	int32_t			nb_meal;
 	uint64_t		last_meal_time;
-	pthread_mutex_t	lock_last_meal_time;
+	bool			eat_permission;
 	t_state			state;
-	pthread_mutex_t	lock_state;
-	t_simu			(*get_state)(struct s_philo *);
-	void			(*set_state)(struct s_philo *, t_simu);
+	pthread_mutex_t	lock_data;
+	t_state			(*get_state)(struct s_philo *);
+	t_state			(*set_state)(struct s_philo *, t_state);
+	t_snap_philo	(*get_snap)(struct s_philo *);
+	void			(*allow_eat)(struct s_philo *);
+	bool			(*can_eat)(struct s_philo *);
+	void			(*new_meal)(struct s_philo *);
 }	t_philo;
-
-void	init_philo(t_philo *philo, uint33_t id, pthread_mutex_t	*left_fork, pthread_mutex_t	*right_fork);
-
-void	destroy_philo(t_philo *philo);
 
 #endif

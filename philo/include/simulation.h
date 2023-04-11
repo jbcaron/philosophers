@@ -6,12 +6,15 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 10:42:02 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:28:34 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SIMULATION_H
 #define SIMULATION_H
+
+# include <stdint.h>
+# include <pthread.h>
 
 typedef enum e_simu
 {
@@ -42,11 +45,11 @@ typedef struct s_prog
 	t_simu			state;
 	pthread_mutex_t	lock_state;
 	pthread_mutex_t	*forks;
-	t_event_buffer	event_buf;
+	//t_event_buffer	event_buf;
 	t_simu			(*get_state)(struct s_prog *);
 	void			(*set_state)(struct s_prog *, t_simu);
 }	t_prog;
 
-void	init_prog(t_prog *this, t_param param);
+void	init_prog(t_prog *this, t_settings param);
 
 #endif
