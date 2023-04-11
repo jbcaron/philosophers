@@ -3,39 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print_event.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcaron <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/10 15:16:32 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/11 10:13:14 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-enum	e_event
-{
-	TAKE_FORK,
-	EAT,
-	SLEEP,
-	THINK,
-	DIE
-}
-
-typedef struct	s_event
-{
-	pthread_mutex_t lock;
-	int				philo_id;
-	enum e_event	event_type;
-	uint64_t		timestamp;
-}	t_event;
-
-typedef struct	s_event_buffer
-{
-	t_event			*buffer;
-	size_t			size;
-	size_t			head;
-	size_t			tail;
-	pthread_mutex_t	lock;
-	
-}	t_event_buffer;
+#include "event.h"
 
 void	event_buffer_create(t_print_buffer *buf, size_t size)
 {	
