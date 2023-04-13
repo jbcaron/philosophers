@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 19:27:35 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:00:27 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,33 +108,54 @@ void	upon_enter_idle(t_philo *philo, t_prog *prog)
 {
 }
 
+void	upon_exit_idle(t_philo *philo, t_prog *prog)
+{
+	philo->new_meal(philo, prog->start_time);
+}
+
 void	upon_enter_eat(t_philo *philo, t_prog *prog)
 {
+	t_event	event;
+
+	philo->new_meal(philo, prog->start_time);
+	event.timestamp = get_time_ms();
+	event.philo_id = philo->id;
+	event.type = EATING;
+	prog->event_buf.push(&prog->event_buf, &event);
 }
 
 void	upon_enter_sleep(t_philo *philo, t_prog *prog)
 {
+	t_event	event;
+
+	event.timestamp = get_time_ms();
+	event.philo_id = philo->id;
+	event.type = SLEEPING;
+	prog->event_buf.push(&prog->event_buf, &event);
 }
 
 void	upon_enter_think(t_philo *philo, t_prog *prog)
 {
+	t_event	event;
+
+	event.timestamp = get_time_ms();
+	event.philo_id = philo->id;
+	event.type = THINKING;
+	prog->event_buf.push(&prog->event_buf, &event);
 }
 
 void	upon_enter_dead(t_philo *philo, t_prog *prog)
 {
-}
+	t_event	event;
 
-static void	(*g_upon_state_philo[5])(t_philo*, t_prog*) = {
-	upon_enter_idle,
-	upon_enter_eat,
-	upon_enter_sleep,
-	upon_enter_think,
-	upon_enter_dead
-};
+	event.timestamp = get_time_ms();
+	event.philo_id = philo->id;
+	event.type = DIED;
+	prog->event_buf.push(&prog->event_buf, &event);
+}
 
 void	check_idle(t_philo *philo, t_prog *prog)
 {
-
 	if (prog->state == START)
 	{
 		philo->state = THINK;

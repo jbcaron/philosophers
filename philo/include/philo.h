@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 19:19:28 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/13 12:57:36 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_philo
 	t_snap_philo	(*get_snap)(struct s_philo *);
 	void			(*allow_eat)(struct s_philo *);
 	bool			(*can_eat)(struct s_philo *);
-	void			(*new_meal)(struct s_philo *);
+	void			(*new_meal)(struct s_philo *, uint64_t);
 }	t_philo;
 
 #endif

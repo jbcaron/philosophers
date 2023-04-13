@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 15:28:34 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/13 11:38:57 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdint.h>
 # include <pthread.h>
+# include "event.h"
 
 typedef enum e_simu
 {
@@ -41,6 +42,7 @@ typedef struct s_settings
 typedef struct s_prog
 {
 	t_settings		param;
+	t_event_buffer	event_buf;
 	uint64_t		start_time;
 	t_simu			state;
 	pthread_mutex_t	lock_state;

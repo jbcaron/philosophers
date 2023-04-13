@@ -6,47 +6,90 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 10:13:14 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/13 11:37:18 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "event.h"
+#include "error.h"
 
-void	event_buffer_create(t_print_buffer *buf, size_t size)
+int	init_event_buffer(t_event_buffer *this, size_t size)
 {	
-	if (pthread_mutex_init(&buf->lock, NULL) < 0)
-		return (-1);
-	buf->buffer = ft_malloc(size);
-	buf->size = size;
-	buf->head = 0;
-	buf->tail = 0;
+	this->events = malloc(sizeof(*this->events) * size);
+	if (!this->events)
+		return (ERROR_MALLOC);
+	this->size = size;
+	this->head = 0;
+	this->tail = 0;
+	if (pthread_mutex_init(&this->lock, NULL) < 0)
+	{
+		free(this->events);
+		return (ERROR_MUTEX);
+	}
+	return (SUCCESS);
 }
 
-int	event_buffer_destroy(t_print_buffer *buf)
+void	destroy_event_buffer(t_event_buffer *this)
 {
-	ft_free(buf->buffer);
-	buf->buffer = NULL;
-	buf->size = 0;
-	buf->head = 0;
-	buf->tail = 0;
+	ft_free(this->events);
+	pthread_mutex_destroy(&this->lock);
+	this->events = NULL;
+	this->size = 0;
+	this->head = 0;
+	this->tail = 0;
 }
 
-int	print_buffer_write(t_print_buffer *buf, char *msg)
+bool	push_event_buffer(t_event_buffer *this, t_event	*event)
 {
 	size_t	i;
 
-	pthread_mutex_lock(&buf->lock);
-	while (msg)
+	pthread_mutex_lock(&this->lock);
+	i = (this->head + 1) % this->size;
+	if (i == this->tail)
 	{
-		i = (buf->tail + 1) % buf->size;
-		while (i == buf->tail)
-			;
-		buf->buffer[i] = *msg;
-		buf->tail = i;
-		msg++;
+		pthread_mutex_lock(&this->lock);
+		return (false);
 	}
+	this->events[i] = *event;
+	this->tail = i;
+	pthread_mutex_lock(&this->lock);
+	return (true);
 }
 
-void	add_event(s_event)
-void	remove_event(s_event)
+bool	pull_event_buffer(t_event_buffer *this, t_event	*event)
+{
+	size_t	i;
 
+	pthread_mutex_lock(&this->lock);
+	i = (this->tail + 1) % this->size;
+	if (this->head == this->tail)
+	{
+		pthread_mutex_lock(&this->lock);
+		return (false);
+	}
+	*event = this->events[this->tail];
+	this->tail = (this->tail + 1) % this->size;
+	pthread_mutex_lock(&this->lock);
+	return (true);
+}
+
+static const char	*g_action[] = {
+	"has taken a fork",
+	"is eating",
+	"is sleeping",
+	"is thinking",
+	"died"
+};
+
+void	flush_event_buffer(t_event_buffer *this)
+{
+	t_event	event;
+
+	while (this->__pull(this, &event))
+	{
+		printf("%ld %d %s\n", event.timestamp, event.philo_id,
+			g_action[event.event_type]);
+	}
+}

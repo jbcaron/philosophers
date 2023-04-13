@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 14:18:57 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/11 18:21:32 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/13 11:07:05 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 # define ERROR_MALLOC				-10
 # define ERROR_PTHREAD				-20
 # define ERROR_MUTEX				-21
-
-typedef enum	e_error
-{
-	SUCCESS = 0,
-	INVALID_PARAMETER
-}	t_error;
+# define ERROR_BUFFER				-30
 
 #endif
