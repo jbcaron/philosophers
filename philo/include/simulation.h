@@ -6,12 +6,12 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/13 11:38:57 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/14 16:50:46 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SIMULATION_H
-#define SIMULATION_H
+# define SIMULATION_H
 
 # include <stdint.h>
 # include <pthread.h>
@@ -42,15 +42,28 @@ typedef struct s_settings
 typedef struct s_prog
 {
 	t_settings		param;
-	t_event_buffer	event_buf;
 	uint64_t		start_time;
-	t_simu			state;
-	pthread_mutex_t	lock_state;
-	pthread_mutex_t	*forks;
-	//t_event_buffer	event_buf;
+	t_event_buffer	event_buf;
+	t_simu			_state;
+	pthread_mutex_t	_lock_state;
 	t_simu			(*get_state)(struct s_prog *);
 	void			(*set_state)(struct s_prog *, t_simu);
 }	t_prog;
+
+typedef struct s_monitoring
+{
+	t_prog			prog;
+	pthread_t		*threads;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
+
+}	t_monitoring;
+
+typedef struct s_data_thread
+{
+	t_philo	*philo;
+	t_prog	*prog;
+}	t_data_thread;
 
 void	init_prog(t_prog *this, t_settings param);
 

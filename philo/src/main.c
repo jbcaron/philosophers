@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:52:30 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/10 10:56:44 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/14 16:09:50 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,13 @@ int	main(int argc, char **argv)
 	pthread_join(new_thread, NULL);
 	return (0);
 }
+
+void	main_routine()
+{
+	while (prog->get_state(prog) != STOP)
+	{
+
+	}
+}
+
+bool	
