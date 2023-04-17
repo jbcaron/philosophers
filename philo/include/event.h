@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:41 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 14:56:15 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 16:26:24 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_event_buffer
 	pthread_mutex_t	_lock;
 	int				(*push)(struct s_event_buffer *, t_event *);
 	bool			(*_pull)(struct s_event_buffer *, t_event *);
-	void			(*flush)(struct s_event_buffer *);
+	void			(*flush)(struct s_event_buffer *, uint64_t);
 }	t_event_buffer;
 
 #endif

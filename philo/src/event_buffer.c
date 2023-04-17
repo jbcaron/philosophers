@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 15:46:21 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 16:26:36 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,13 @@ static const char	*g_action[] = {
  * @param this Pointer to the event buffer structure.
  */
 
-void	flush_event_buffer(t_event_buffer *this)
+void	flush_event_buffer(t_event_buffer *this, uint64_t start_time)
 {
 	t_event	event;
 
 	while (this->_pull(this, &event))
 	{
-		printf("%ld %d %s\n", event.timestamp, event.philo_id,
+		printf("%ld %d %s\n", event.timestamp - start_time, event.philo_id,
 			g_action[event.type]);
 	}
 }

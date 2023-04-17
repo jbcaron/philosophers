@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 15:47:33 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 15:46:24 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	check_thinking(t_philo *philo, t_prog *prog)
 	else if (philo->can_eat(philo))
 	{
 		philo->pickup_forks(philo, prog);
+		philo->set_state(philo, EAT);
+		upon_enter_eat(philo, prog);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:52:30 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 16:09:50 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 16:33:39 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-void	main_routine()
+void	monitor_routine(t_monitoring *monitor)
 {
+	t_prog	*prog;
+
+	prog = &monitor->prog;
 	while (prog->get_state(prog) != STOP)
 	{
-
+		
+		prog->event_buffer.flush_event_buffer(&prog->event_buffer, monitor->start_time);
 	}
 }
-
-bool	

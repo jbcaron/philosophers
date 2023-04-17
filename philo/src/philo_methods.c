@@ -6,10 +6,11 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 15:16:22 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 18:00:07 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "philo.h"
 #include "simulation.h"
 #include "error.h"
@@ -29,6 +30,7 @@ int	init_philo(t_philo *this, uint32_t id, pthread_mutex_t	*left_fork, pthread_m
 	this->can_eat = _can_eat_philo;
 	this->pickup_forks = _pickup_forks_philo;
 	this->new_meal = _new_meal_philo;
+	this->stop = _stop_philo;
 	if (pthread_mutex_init(&this->_lock_data, NULL))
 		return (ERROR_MUTEX);
 	return (SUCCESS);
@@ -76,6 +78,7 @@ t_snap_philo	_get_snap_philo(t_philo *this)
 	snap.time_last_meal = this->_last_meal_time;
 	snap.nb_meal = this->_nb_meal;
 	snap.state = this->_state;
+	snap.eat_permission = this->_eat_permission;
 	pthread_mutex_unlock(&this->_lock_data);
 	return (snap);
 }
@@ -102,7 +105,7 @@ void	_pickup_forks_philo(t_philo *this, t_prog *prog)
 	t_event	event;
 
 	event.philo_id = this->id;
-	event.type = EATING;
+	event.type = TAKE_FORK;
 	pthread_mutex_lock(this->_left_fork);
 	event.timestamp = get_time_ms();
 	prog->event_buf.push(&prog->event_buf, &event);
@@ -118,4 +121,15 @@ void	_new_meal_philo(t_philo *this, uint64_t time)
 	++this->_nb_meal;
 	this->can_eat = false;
 	pthread_mutex_unlock(&this->_lock_data);
+}
+
+void	_stop_philo(t_philo *this)
+{
+	if (this->get_state(this) == EAT)
+	{
+		pthread_mutex_unlock(this->_left_fork);
+		pthread_mutex_unlock(this->_right_fork);
+	}
+	destroy_philo(this);
+	pthread_exit(EXIT_SUCCESS);
 }

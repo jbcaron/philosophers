@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 17:09:20 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 17:57:46 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_snap_philo
 	uint64_t		time_last_meal;
 	int32_t			nb_meal;
 	t_state			state;
+	bool			eat_permission;
 }	t_snap_philo;
 
 typedef struct s_philo
@@ -53,6 +54,7 @@ typedef struct s_philo
 	bool			(*can_eat)(struct s_philo *);
 	void			(*pickup_forks)(struct s_philo *, t_prog *);
 	void			(*new_meal)(struct s_philo *, uint64_t);
+	void			(*stop)(struct s_philo *);
 }	t_philo;
 
 int				init_philo(t_philo *this, uint32_t id, pthread_mutex_t	*left_fork, pthread_mutex_t	*right_fork);
@@ -64,8 +66,8 @@ t_snap_philo	_get_snap_philo(t_philo *this);
 void			_allow_eat_philo(t_philo *this);
 bool			_can_eat_philo(t_philo *this);
 void			_pickup_forks_philo(t_philo *this, t_prog *prog);
-void			_pickup_forks_philo(t_philo *this, t_prog *prog);
 void			_new_meal_philo(t_philo *this, uint64_t time);
+void			_stop_philo(t_philo *this);
 
 void			*thread_philo(void *data_thread);
 void			routine_philo(t_philo *philo, t_prog *prog);

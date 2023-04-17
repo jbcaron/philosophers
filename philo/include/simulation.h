@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 16:50:46 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 17:14:21 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ typedef enum e_simu
 	STOP
 }	t_simu;
 
-typedef enum e_parity
-{
-	ODD,
-	PEER
-}	t_parity;
-
 typedef struct s_settings
 {
 	int32_t			nb_philo;
@@ -42,7 +36,6 @@ typedef struct s_settings
 typedef struct s_prog
 {
 	t_settings		param;
-	uint64_t		start_time;
 	t_event_buffer	event_buf;
 	t_simu			_state;
 	pthread_mutex_t	_lock_state;
@@ -53,9 +46,14 @@ typedef struct s_prog
 typedef struct s_monitoring
 {
 	t_prog			prog;
+	uint64_t		start_time;
 	pthread_t		*threads;
 	t_philo			*philos;
+	t_snap			*snap_philos;
 	pthread_mutex_t	*forks;
+	int				(*start)(struct s_monitoring *);
+	void			(*maj_snap)(struct s_monitoring *);
+	void			(*stop)(struct s_monitoring *);
 
 }	t_monitoring;
 
@@ -65,6 +63,10 @@ typedef struct s_data_thread
 	t_prog	*prog;
 }	t_data_thread;
 
-void	init_prog(t_prog *this, t_settings param);
+int		_init_prog(t_prog *this, t_settings param);
+void	_destroy_prog(t_prog *this);
+
+int		_start_monitor(t_monitoring *this);
+void	_maj_snap(t_monitoring *this);
 
 #endif

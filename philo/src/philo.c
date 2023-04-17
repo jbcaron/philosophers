@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 16:46:12 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/17 15:11:58 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,5 @@ void	routine_philo(t_philo *philo, t_prog *prog)
 	{
 		g_check_state_philo[philo->get_state(philo)](philo, prog);
 	}
-	destroy_philo(philo);
-	pthread_exit(EXIT_SUCCESS);
+	philo->stop(philo);
 }
