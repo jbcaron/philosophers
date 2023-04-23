@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 17:14:21 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/04/23 14:41:00 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,19 @@ typedef struct s_data_thread
 	t_prog	*prog;
 }	t_data_thread;
 
+int		_init_monitor_memory(t_monitoring *this);
+int		_init_monitor_mutex(t_monitoring *this);
 int		_init_prog(t_prog *this, t_settings param);
+void	_destroy_monitor_memory(t_monitoring *this);
+void	_destroy_monitor_mutex(t_monitoring *this);
 void	_destroy_prog(t_prog *this);
-
 int		_start_monitor(t_monitoring *this);
+bool	_one_dead_monitor(t_monitoring *this);
 void	_maj_snap(t_monitoring *this);
+
+int		init_monitor(t_monitoring *this, t_settings param);
+void	destroy_monitor(t_monitoring *this);
+void	give_permission_eat(t_monitoring *this);
+
 
 #endif
