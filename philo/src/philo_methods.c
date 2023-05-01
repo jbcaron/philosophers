@@ -6,20 +6,20 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 18:00:07 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 11:42:37 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "philo.h"
 #include "simulation.h"
-#include "error.h"
 
-int	init_philo(t_philo *this, uint32_t id, pthread_mutex_t	*left_fork, pthread_mutex_t	*right_fork)
+int	init_philo(t_philo *this, uint32_t id, t_monitoring *data)
 {
+	this->prog = &data->prog;
 	this->id = id;
-	this->_left_fork = left_fork;
-	this->_right_fork = right_fork;
+	this->_left_fork = &data->forks[id];
+	this->_right_fork = &data->forks[(id + 1) % data->prog->param.nb_philo];
 	this->_nb_meal = -1;
 	this->_state = IDLE;
 	this->get_state = _get_state_philo;
@@ -32,13 +32,12 @@ int	init_philo(t_philo *this, uint32_t id, pthread_mutex_t	*left_fork, pthread_m
 	this->new_meal = _new_meal_philo;
 	this->stop = _stop_philo;
 	if (pthread_mutex_init(&this->_lock_data, NULL))
-		return (ERROR_MUTEX);
-	return (SUCCESS);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 void	destroy_philo(t_philo *this)
 {
-	this->id = 0;
 	pthread_mutex_destroy(&this->_lock_data);
 }
 

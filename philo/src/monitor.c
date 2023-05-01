@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/23 14:37:35 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 13:02:50 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include "simulation.h"
 #include "philo.h"
-#include "error.h"
 
 int	_init_monitor_memory(t_monitoring *this)
 {
@@ -28,9 +27,28 @@ int	_init_monitor_memory(t_monitoring *this)
 	if (!this->threads || !this->philos || !this->snap_philos || !this->forks)
 	{
 		_destroy_monitor_memory(this);
-		return (ERROR_MALLOC);
+		return (EXIT_FAILURE);
 	}
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
+}
+
+int	_init_monitor_philo(t_monitoring *this)
+{
+	int32_t	i;
+	int32_t	nb_philo;
+
+	nb_philo = this->prog.param.nb_philo;
+	i = -1;
+	while (++i < nb_philo)
+	{
+		if (init_philo(&this->philos[i], i, this))
+		{
+			while (--i)
+				destroy_philo(&this->philos[i]);
+			return (EXIT_FAILURE);
+		}
+	}
+	return (EXIT_SUCCESS);
 }
 
 int	_init_monitor_mutex(t_monitoring *this)
@@ -46,27 +64,24 @@ int	_init_monitor_mutex(t_monitoring *this)
 		{
 			while (--i)
 				pthread_mutex_destroy(&this->forks[i]);
-			return (ERROR_MUTEX);
+			return (EXIT_FAILURE);
 		}
 	}
-	return (SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 int	_init_prog(t_prog *this, t_settings param)
 {
-	int	error;
-
 	this->param = param;
 	this->_state = WAIT;
-	error = init_event_buffer(&this->event_buf, param.nb_philo * 2);
-	if (error)
-		return (error);
+	if (init_event_buffer(&this->event_buf, param.nb_philo * 2))
+		return (EXIT_FAILURE);
 	if (pthread_mutex_init(&this->_lock_state, NULL))
 	{
 		destroy_event_buffer(&this->event_buf);
-		return (ERROR_MUTEX);
+		return (EXIT_FAILURE);
 	}
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 void	_destroy_prog(t_prog *this)
@@ -97,28 +112,22 @@ void	_destroy_monitor_mutex(t_monitoring *this)
 
 int	init_monitor(t_monitoring *this, t_settings param)
 {
-	int	error;
-
-	error = _init_monitor_memory(this);
-	if (error)
-		return (error);
-	error = _init_monitor_mutex(this);
-	if (error)
+	if (init_monitor_memory(this))
+		return (EXIT_FAILURE);
+	if (init_monitor_mutex(this))
 	{
 		_destroy_monitor_memory(this);
-		return (error);
+		return (EXIT_FAILURE);
 	}
-	error = init_prog(&this->prog, param);
-	if (error)
+	if (init_prog(&this->prog, param))
 	{
 		_destroy_monitor_mutex(this);
 		_destroy_monitor_memory(this);
-		return (error);
+		return (EXIT_FAILURE);
 	}
 	this->start = _start_monitor;
 	this->maj_snap = _maj_snap;
-
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 void	destroy_monitor(t_monitoring *this)
@@ -132,19 +141,34 @@ int	_start_monitor(t_monitoring *this)
 {
 	int32_t			i;
 	int32_t			nb_philo;
-	t_data_thread	data;
 
 	nb_philo = this->prog.param.nb_philo;
-	data.prog = &this->prog;
 	i = -1;
 	while (++i < nb_philo)
 	{
-		if (pthread_create(&this->threads[i], NULL, thread_philo, (void *)(&data)))
-			return (ERROR_THREAD);
+		if (pthread_create(&this->threads[i], NULL, thread_philo, (void *)(&this->philos[i])))
+		{
+			this->prog.set_state(&this->prog, STOP);
+			while (--i)
+				pthread_join(this->threads[i], NULL);
+			return (EXIT_FAILURE);
+		}
 	}
 	this->start_time = get_time_ms();
 	this->prog.set_state(&this->prog, START);
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
+}
+
+void	_stop_monitor(t_monitoring *this)
+{
+	int32_t			i;
+	int32_t			nb_philo;
+
+	nb_philo = this->prog.param.nb_philo;
+	this->prog.set_state(&this->prog, STOP);
+	i = -1;
+	while (++i < nb_philo)
+		pthread_join(this->threads[i], NULL);
 }
 
 bool	_one_dead_monitor(t_monitoring *this)
@@ -170,8 +194,22 @@ void	_maj_snap(t_monitoring *this)
 	nb_philo = this->prog.param.nb_philo;
 	i = -1;
 	while (++i < nb_philo)
-		this->snap_philos[i] = this->philos[i].snap(this->philos[i]);
+		this->snap_philos[i] = this->philos[i].get_snap(&this->philos[i]);
 }
+
+/**
+ * @brief Gives permission to philosophers to eat based on their state and
+ * neighbors.
+ * 
+ * This function iterates through all philosophers and checks if they are
+ * allowed to eat based on their current state, their neighbors' states, and
+ * their last meal times. If a philosopher is allowed to eat, their
+ * eat_permission is set to true and the allow_eat() function is called for
+ * that philosopher.
+ *
+ * @param this Pointer to a t_monitoring structure containing the philosophers
+ * and their states.
+ */
 
 void	give_permission_eat(t_monitoring *this)
 {
@@ -188,7 +226,7 @@ void	give_permission_eat(t_monitoring *this)
 			left_id = nb_philo - 1;
 		else
 			left_id = i - 1;
-		right_id = (i + 1) % (nb_philo - 1);
+		right_id = (i + 1) % (nb_philo);
 		if (this->snap_philos[i].eat_permission == false &&
 			this->snap_philos[i].state == THINKING &&
 			this->snap_philos[left_id].eat_permission == false &&

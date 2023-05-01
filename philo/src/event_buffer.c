@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 16:26:36 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 11:45:14 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 /**
  * @brief Initializes the event buffer.
+ * 
  * @param this Pointer to the event buffer structure.
  * @param size Size of the event buffer.
  * @return ERROR_MALLOC if memory allocation fails, ERROR_MUTEX if mutex
@@ -27,20 +28,21 @@ int	init_event_buffer(t_event_buffer *this, size_t size)
 {	
 	this->_events = malloc(sizeof(*this->_events) * size);
 	if (!this->_events)
-		return (ERROR_MALLOC);
+		return (EXIT_FAILURE);
 	this->_size = size;
 	this->_head = 0;
 	this->_tail = 0;
 	if (pthread_mutex_init(&this->_lock, NULL) < 0)
 	{
 		free(this->_events);
-		return (ERROR_MUTEX);
+		return (EXIT_FAILURE);
 	}
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 /**
  * @brief Destroys the event buffer and releases resources.
+ * 
  * @param this Pointer to the event buffer structure.
  */
 
@@ -56,6 +58,7 @@ void	destroy_event_buffer(t_event_buffer *this)
 
 /**
  * @brief Pushes an event into the event buffer.
+ * 
  * @param this Pointer to the event buffer structure.
  * @param event Pointer to the event structure to be pushed.
  * @return true if the event is pushed successfully; false if the buffer is
@@ -81,6 +84,7 @@ bool	push_event_buffer(t_event_buffer *this, t_event	*event)
 
 /**
  * @brief Pulls an event from the event buffer.
+ * 
  * @param this Pointer to the event buffer structure.
  * @param event Pointer to the event structure to store the pulled event.
  * @return true if an event is pulled successfully; false if the buffer is
@@ -114,6 +118,7 @@ static const char	*g_action[] = {
 
 /**
  * @brief Flushes the event buffer and prints the events.
+ * 
  * @param this Pointer to the event buffer structure.
  */
 
@@ -123,7 +128,7 @@ void	flush_event_buffer(t_event_buffer *this, uint64_t start_time)
 
 	while (this->_pull(this, &event))
 	{
-		printf("%ld %d %s\n", event.timestamp - start_time, event.philo_id,
+		printf("%ld %d %s\n", event.timestamp - start_time, event.philo_id + 1,
 			g_action[event.type]);
 	}
 }

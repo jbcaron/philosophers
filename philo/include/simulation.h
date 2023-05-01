@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/23 14:41:00 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 13:18:33 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdint.h>
 # include <pthread.h>
 # include "event.h"
+# include "philo.h"
 
 typedef enum e_simu
 {
@@ -49,19 +50,13 @@ typedef struct s_monitoring
 	uint64_t		start_time;
 	pthread_t		*threads;
 	t_philo			*philos;
-	t_snap			*snap_philos;
+	t_snap_philo	*snap_philos;
 	pthread_mutex_t	*forks;
 	int				(*start)(struct s_monitoring *);
 	void			(*maj_snap)(struct s_monitoring *);
 	void			(*stop)(struct s_monitoring *);
 
 }	t_monitoring;
-
-typedef struct s_data_thread
-{
-	t_philo	*philo;
-	t_prog	*prog;
-}	t_data_thread;
 
 int		_init_monitor_memory(t_monitoring *this);
 int		_init_monitor_mutex(t_monitoring *this);
@@ -77,5 +72,6 @@ int		init_monitor(t_monitoring *this, t_settings param);
 void	destroy_monitor(t_monitoring *this);
 void	give_permission_eat(t_monitoring *this);
 
+int		get_param(t_settings *param, int argc, char **argv);
 
 #endif

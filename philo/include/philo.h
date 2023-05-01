@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 17:57:46 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 10:55:00 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_snap_philo
 
 typedef struct s_philo
 {
+	t_prog			*prog;
 	uint32_t		id;
 	pthread_mutex_t	*_left_fork;
 	pthread_mutex_t	*_right_fork;
