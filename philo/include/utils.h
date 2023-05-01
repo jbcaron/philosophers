@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/26 15:53:51 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 11:54:37 by jcaron           ###   ########.fr       */
+/*   Created: 2023/05/01 15:03:45 by jcaron            #+#    #+#             */
+/*   Updated: 2023/05/01 15:09:13 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef UTILS_H
+# define UTILS_H
+
+#include <stdlib.h>
 #include <stdint.h>
-#include <sys/time.h>
 
-#include <stdio.h>
+size_t		ft_strlen(const char *str);
+int			ft_strcmp(const char *s1, const char *s2);
+bool		ft_isspace(char c);
+bool		ft_isdigit(char c);
+bool		ft_str_is_digit(const char *str);
+int32_t		atoint32(const char *str);
+uint64_t	get_time_ms(void);
+uint64_t	get_time_us(void);
 
-uint64_t	get_time_ms(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-uint64_t	get_time_us(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000000 + time.tv_usec);
-}
+#endif

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:44:56 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:56:48 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,15 @@ int		_init_monitor_mutex(struct s_monitoring *this);
 int		_init_prog(struct s_prog *this, struct s_settings param);
 void	_destroy_monitor_memory(struct s_monitoring *this);
 void	_destroy_monitor_mutex(struct s_monitoring *this);
-void	_destroy_prog(t_prog *this);
+void	_destroy_prog(struct s_prog *this);
 int		_start_monitor(struct s_monitoring *this);
 bool	_one_dead_monitor(struct s_monitoring *this);
 void	_maj_snap(struct s_monitoring *this);
 
-int		init_monitor(struct s_monitoring *this, t_settings param);
+int		init_monitor(struct s_monitoring *this, struct s_settings param);
 void	destroy_monitor(struct s_monitoring *this);
 void	give_permission_eat(struct s_monitoring *this);
 
-int		get_param(t_settings *param, int argc, char **argv);
+int		get_param(struct s_settings *param, int argc, char **argv);
 
 #endif
