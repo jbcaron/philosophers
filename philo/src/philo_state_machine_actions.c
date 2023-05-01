@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:37 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/14 15:22:11 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:40:33 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	upon_exit_idle(t_philo *philo, t_prog *prog)
 {
-	philo->new_meal(philo, prog->start_time);
+	philo->new_meal(philo, get_time_ms());
 }
 
 void	upon_enter_eat(t_philo *philo, t_prog *prog)

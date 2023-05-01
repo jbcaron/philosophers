@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 11:42:37 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:37:16 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	init_philo(t_philo *this, uint32_t id, t_monitoring *data)
 	this->prog = &data->prog;
 	this->id = id;
 	this->_left_fork = &data->forks[id];
-	this->_right_fork = &data->forks[(id + 1) % data->prog->param.nb_philo];
+	this->_right_fork = &data->forks[(id + 1) % data->prog.param.nb_philo];
 	this->_nb_meal = -1;
 	this->_state = IDLE;
 	this->get_state = _get_state_philo;

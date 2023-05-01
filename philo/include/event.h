@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:41 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 16:26:24 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:28:24 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_event
 
 typedef struct s_event_buffer
 {
-	t_event			*_events;
+	struct s_event	*_events;
 	size_t			_size;
 	size_t			_head;
 	size_t			_tail;

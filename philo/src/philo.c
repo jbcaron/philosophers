@@ -6,10 +6,11 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 15:11:58 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:36:35 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "philo.h"
 #include "simulation.h"
 #include "error.h"
@@ -24,10 +25,11 @@ static void	(*g_check_state_philo[5])(t_philo*, t_prog*) = {
 
 void	*thread_philo(void *data_thread)
 {
-	t_data_thread	*data;
+	t_philo	*data;
 
-	data = (t_data_thread *)data_thread;
-	routine_philo(data->philo, data->prog);
+	data = (t_philo *)data_thread;
+	routine_philo(data, data->prog);
+	return (EXIT_SUCCESS);
 }
 
 void	routine_philo(t_philo *philo, t_prog *prog)

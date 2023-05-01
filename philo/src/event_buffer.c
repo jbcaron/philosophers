@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 11:45:14 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:29:05 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	init_event_buffer(t_event_buffer *this, size_t size)
 
 void	destroy_event_buffer(t_event_buffer *this)
 {
-	ft_free(this->_events);
+	free(this->_events);
 	pthread_mutex_destroy(&this->_lock);
 	this->_events = NULL;
 	this->_size = 0;

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 13:18:33 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 14:44:56 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,41 +36,42 @@ typedef struct s_settings
 
 typedef struct s_prog
 {
-	t_settings		param;
-	t_event_buffer	event_buf;
-	t_simu			_state;
-	pthread_mutex_t	_lock_state;
-	t_simu			(*get_state)(struct s_prog *);
-	void			(*set_state)(struct s_prog *, t_simu);
+	struct s_settings		param;
+	struct s_event_buffer	event_buf;
+	enum e_simu				_state;
+	pthread_mutex_t			_lock_state;
+	t_simu					(*get_state)(struct s_prog *);
+	void					(*set_state)(struct s_prog *, t_simu);
 }	t_prog;
 
 typedef struct s_monitoring
 {
-	t_prog			prog;
-	uint64_t		start_time;
-	pthread_t		*threads;
-	t_philo			*philos;
-	t_snap_philo	*snap_philos;
-	pthread_mutex_t	*forks;
-	int				(*start)(struct s_monitoring *);
-	void			(*maj_snap)(struct s_monitoring *);
-	void			(*stop)(struct s_monitoring *);
+	struct s_prog		prog;
+	uint64_t			start_time;
+	pthread_t			*threads;
+	struct s_philo		*philos;
+	struct s_snap_philo	*snap_philos;
+	pthread_mutex_t		*forks;
+	int					(*start)(struct s_monitoring *);
+	void				(*maj_snap)(struct s_monitoring *);
+	bool				(*one_dead)(struct s_monitoring *);
+	void				(*stop)(struct s_monitoring *);
 
 }	t_monitoring;
 
-int		_init_monitor_memory(t_monitoring *this);
-int		_init_monitor_mutex(t_monitoring *this);
-int		_init_prog(t_prog *this, t_settings param);
-void	_destroy_monitor_memory(t_monitoring *this);
-void	_destroy_monitor_mutex(t_monitoring *this);
+int		_init_monitor_memory(struct s_monitoring *this);
+int		_init_monitor_mutex(struct s_monitoring *this);
+int		_init_prog(struct s_prog *this, struct s_settings param);
+void	_destroy_monitor_memory(struct s_monitoring *this);
+void	_destroy_monitor_mutex(struct s_monitoring *this);
 void	_destroy_prog(t_prog *this);
-int		_start_monitor(t_monitoring *this);
-bool	_one_dead_monitor(t_monitoring *this);
-void	_maj_snap(t_monitoring *this);
+int		_start_monitor(struct s_monitoring *this);
+bool	_one_dead_monitor(struct s_monitoring *this);
+void	_maj_snap(struct s_monitoring *this);
 
-int		init_monitor(t_monitoring *this, t_settings param);
-void	destroy_monitor(t_monitoring *this);
-void	give_permission_eat(t_monitoring *this);
+int		init_monitor(struct s_monitoring *this, t_settings param);
+void	destroy_monitor(struct s_monitoring *this);
+void	give_permission_eat(struct s_monitoring *this);
 
 int		get_param(t_settings *param, int argc, char **argv);
 
