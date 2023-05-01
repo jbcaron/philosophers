@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:56:48 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:28:11 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		_start_monitor(struct s_monitoring *this);
 bool	_one_dead_monitor(struct s_monitoring *this);
 void	_maj_snap(struct s_monitoring *this);
 
-int		init_monitor(struct s_monitoring *this, struct s_settings param);
+int		init_monitor(struct s_monitoring *this, t_settings param);
 void	destroy_monitor(struct s_monitoring *this);
 void	give_permission_eat(struct s_monitoring *this);
 

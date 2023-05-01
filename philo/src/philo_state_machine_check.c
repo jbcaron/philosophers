@@ -6,13 +6,13 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/04/17 15:46:24 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:25:32 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "simulation.h"
-#include "error.h"
+#include "utils.h"
 
 void	check_idle(t_philo *philo, t_prog *prog)
 {
@@ -26,15 +26,15 @@ void	check_idle(t_philo *philo, t_prog *prog)
 
 void	check_eat(t_philo *philo, t_prog *prog)
 {
-	uint64_t	last_meal;
+	int64_t	time_since_meal;
 
-	last_meal = philo->get_last_meal(philo);
-	if (last_meal >= prog->param.time_to_die)
+	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);
 		upon_enter_dead(philo, prog);
 	}
-	else if (last_meal >= prog->param.time_to_eat)
+	else if (time_since_meal >= prog->param.time_to_eat)
 	{
 		philo->set_state(philo, SLEEP);
 		upon_enter_sleep(philo, prog);
@@ -43,15 +43,15 @@ void	check_eat(t_philo *philo, t_prog *prog)
 
 void	check_sleep(t_philo *philo, t_prog *prog)
 {
-	uint64_t	last_meal;
+	int64_t	time_since_meal;
 
-	last_meal = philo->get_last_meal(philo);
-	if (last_meal >= prog->param.time_to_die)
+	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);
 		upon_enter_dead(philo, prog);
 	}
-	else if (last_meal >= (prog->param.time_to_eat + prog->param.time_to_eat))
+	else if (time_since_meal >= (prog->param.time_to_eat + prog->param.time_to_eat))
 	{
 		philo->set_state(philo, THINK);
 		upon_enter_think(philo, prog);
@@ -60,10 +60,10 @@ void	check_sleep(t_philo *philo, t_prog *prog)
 
 void	check_thinking(t_philo *philo, t_prog *prog)
 {
-	uint64_t	last_meal;
+	int64_t	time_since_meal;
 
-	last_meal = philo->get_last_meal(philo);
-	if (last_meal >= prog->param.time_to_die)
+	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);
 		upon_enter_dead(philo, prog);

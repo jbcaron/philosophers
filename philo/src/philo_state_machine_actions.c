@@ -6,13 +6,13 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:37 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:40:33 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:24:16 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "simulation.h"
-#include "error.h"
+#include "utils.h"
 
 void	upon_exit_idle(t_philo *philo, t_prog *prog)
 {

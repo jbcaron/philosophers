@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:14:28 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:08:17 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:23:28 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	get_param(t_settings *param, int argc, char **argv)
 		if (is_valid_arg(argv[i]))
 			return (EXIT_FAILURE);
 	}
-	param->nb_philo = itoint32(argv[1]);
-	param->time_to_die = itoint32(argv[2]);
-	param->time_to_eat = itoint32(argv[3]);
-	param->time_to_sleep = itoint32(argv[4]);
+	param->nb_philo = atoint32(argv[1]);
+	param->time_to_die = atoint32(argv[2]);
+	param->time_to_eat = atoint32(argv[3]);
+	param->time_to_sleep = atoint32(argv[4]);
 	if (argc > 5)
-		param->nb_meal = itoint32(argv[5]);
+		param->nb_meal = atoint32(argv[5]);
 	else
 		param->nb_meal = -1;
 	return (EXIT_SUCCESS);

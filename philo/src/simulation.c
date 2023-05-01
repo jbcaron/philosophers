@@ -6,13 +6,12 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:10:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:46:58 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:12:09 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include "simulation.h"
-#include "error.h"
 
 t_simu	get_state_simu(t_prog *this)
 {
