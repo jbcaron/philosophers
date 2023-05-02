@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:41 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:28:24 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:24:25 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ enum	e_event
 
 typedef struct s_event
 {
+	uint64_t		timestamp;
 	uint32_t		philo_id;
 	enum e_event	type;
-	uint64_t		timestamp;
 }	t_event;
 
 typedef struct s_event_buffer
@@ -45,5 +45,11 @@ typedef struct s_event_buffer
 	bool			(*_pull)(struct s_event_buffer *, t_event *);
 	void			(*flush)(struct s_event_buffer *, uint64_t);
 }	t_event_buffer;
+
+int		init_event_buffer(t_event_buffer *this, size_t size);
+void	destroy_event_buffer(t_event_buffer *this);
+bool	push_event_buffer(t_event_buffer *this, t_event	*event);
+bool	pull_event_buffer(t_event_buffer *this, t_event	*event);
+void	flush_event_buffer(t_event_buffer *this, uint64_t start_time);
 
 #endif

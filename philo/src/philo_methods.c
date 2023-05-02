@@ -6,11 +6,12 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:24:19 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 11:58:04 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "utils.h"
 #include "philo.h"
 #include "simulation.h"
 

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:28:11 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 16:16:52 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <stdint.h>
 # include <pthread.h>
 # include "event.h"
-# include "philo.h"
+
+struct	s_philo;
 
 typedef enum e_simu
 {
@@ -38,20 +39,20 @@ typedef struct s_prog
 {
 	struct s_settings		param;
 	struct s_event_buffer	event_buf;
-	enum e_simu				_state;
 	pthread_mutex_t			_lock_state;
 	t_simu					(*get_state)(struct s_prog *);
 	void					(*set_state)(struct s_prog *, t_simu);
+	enum e_simu				_state;
 }	t_prog;
 
 typedef struct s_monitoring
 {
 	struct s_prog		prog;
-	uint64_t			start_time;
-	pthread_t			*threads;
 	struct s_philo		*philos;
 	struct s_snap_philo	*snap_philos;
+	pthread_t			*threads;
 	pthread_mutex_t		*forks;
+	uint64_t			start_time;
 	int					(*start)(struct s_monitoring *);
 	void				(*maj_snap)(struct s_monitoring *);
 	bool				(*one_dead)(struct s_monitoring *);
@@ -62,6 +63,7 @@ typedef struct s_monitoring
 int		_init_monitor_memory(struct s_monitoring *this);
 int		_init_monitor_mutex(struct s_monitoring *this);
 int		_init_prog(struct s_prog *this, struct s_settings param);
+int		_init_monitor_philo(t_monitoring *this);
 void	_destroy_monitor_memory(struct s_monitoring *this);
 void	_destroy_monitor_mutex(struct s_monitoring *this);
 void	_destroy_prog(struct s_prog *this);

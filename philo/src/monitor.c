@@ -6,14 +6,18 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:12:34 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:18:40 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdlib.h>
+#include "utils.h"
 #include "simulation.h"
+#include "event.h"
 #include "philo.h"
+
+#include <stdio.h>
 
 int	_init_monitor_memory(t_monitoring *this)
 {
@@ -67,7 +71,7 @@ int	_init_monitor_mutex(t_monitoring *this)
 			return (EXIT_FAILURE);
 		}
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	_init_prog(t_prog *this, t_settings param)
@@ -112,17 +116,24 @@ void	_destroy_monitor_mutex(t_monitoring *this)
 
 int	init_monitor(t_monitoring *this, t_settings param)
 {
-	if (init_monitor_memory(this))
+	if (_init_monitor_memory(this))
 		return (EXIT_FAILURE);
-	if (init_monitor_mutex(this))
+	if (_init_monitor_mutex(this))
 	{
 		_destroy_monitor_memory(this);
 		return (EXIT_FAILURE);
 	}
-	if (init_prog(&this->prog, param))
+	if (_init_prog(&this->prog, param))
 	{
 		_destroy_monitor_mutex(this);
 		_destroy_monitor_memory(this);
+		return (EXIT_FAILURE);
+	}
+	if (_init_monitor_philo(this))
+	{
+		_destroy_monitor_mutex(this);
+		_destroy_monitor_memory(this);
+		_destroy_prog(&this->prog);
 		return (EXIT_FAILURE);
 	}
 	this->start = _start_monitor;
@@ -228,7 +239,7 @@ void	give_permission_eat(t_monitoring *this)
 			left_id = i - 1;
 		right_id = (i + 1) % (nb_philo);
 		if (this->snap_philos[i].eat_permission == false &&
-			this->snap_philos[i].state == THINKING &&
+			this->snap_philos[i].state == THINK &&
 			this->snap_philos[left_id].eat_permission == false &&
 			this->snap_philos[right_id].eat_permission == false &&
 			this->snap_philos[i].time_last_meal >= this->snap_philos[left_id].time_last_meal &&

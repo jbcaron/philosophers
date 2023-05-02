@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:24:04 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 16:10:10 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <pthread.h>
-# include "simulation.h"
+
+struct	s_prog;
+struct	s_monitoring;
 
 typedef enum e_state
 {
@@ -39,14 +41,14 @@ typedef struct s_snap_philo
 typedef struct s_philo
 {
 	struct s_prog	*prog;
+	uint64_t		_last_meal_time;
 	uint32_t		id;
+	int32_t			_nb_meal;
 	pthread_mutex_t	*_left_fork;
 	pthread_mutex_t	*_right_fork;
-	int32_t			_nb_meal;
-	uint64_t		_last_meal_time;
-	bool			_eat_permission;
-	enum e_state	_state;
 	pthread_mutex_t	_lock_data;
+	enum e_state	_state;
+	bool			_eat_permission;
 	t_state			(*get_state)(struct s_philo *);
 	t_state			(*set_state)(struct s_philo *, t_state);
 	uint64_t		(*get_last_meal)(struct s_philo *);

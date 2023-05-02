@@ -1,8 +1,5 @@
-objs/main.o: src/main.c include/simulation.h include/event.h \
-  include/philo.h
+objs/main.o: src/main.c include/simulation.h include/event.h
 
 include/simulation.h:
 
 include/event.h:
-
-include/philo.h:

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:52:30 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:53:33 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:21:35 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "simulation.h"
 
-void	monitor_routine(t_monitoring *monitor)
+static void	monitor_routine(t_monitoring *monitor)
 {
 	t_prog	*prog;
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 
 	if (get_param(&param, argc, argv))
 	{
-		printf("Error Usage");
+		printf("Error Usage\n");
 		return (EXIT_FAILURE);
 	}
 	if (init_monitor(&monitor, param))

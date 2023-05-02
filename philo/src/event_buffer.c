@@ -6,14 +6,13 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 14:29:05 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 08:33:56 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "event.h"
-#include "error.h"
 
 /**
  * @brief Initializes the event buffer.

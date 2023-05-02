@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:25:32 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 12:00:37 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,6 @@ void	check_thinking(t_philo *philo, t_prog *prog)
 
 void	check_dead(t_philo *philo, t_prog *prog)
 {
+	(void)philo;
+	(void)prog;
 }

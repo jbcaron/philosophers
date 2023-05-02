@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:14:28 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/01 15:23:28 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/02 08:48:42 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static bool	is_valid_arg(char *arg)
 		return (false);
 	if (ft_strlen(arg) > ft_strlen(ARG_MAX))
 		return (false);
-	if (ft_strlen(arg) == (ft_strlen(ARG_MAX)) && ft_strcmp(arg, ARG_MAX))
+	if (ft_strlen(arg) == (ft_strlen(ARG_MAX)) && ft_strcmp(arg, ARG_MAX) > 0)
 		return (false);
 	return (true);
 }
@@ -38,7 +38,7 @@ int	get_param(t_settings *param, int argc, char **argv)
 	i = 0;
 	while (++i < argc)
 	{
-		if (is_valid_arg(argv[i]))
+		if (!is_valid_arg(argv[i]))
 			return (EXIT_FAILURE);
 	}
 	param->nb_philo = atoint32(argv[1]);

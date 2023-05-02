@@ -6,7 +6,7 @@
 #    By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 13:18:42 by jcaron            #+#    #+#              #
-#    Updated: 2023/05/01 14:48:09 by jcaron           ###   ########.fr        #
+#    Updated: 2023/05/02 16:13:55 by jcaron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,15 +20,15 @@ SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC       := clang
-CPPFLAGS := -I$(INC_DIR) -MMD -MP
-CFLAGS   := -Wall -Wextra
+CPPFLAGS := -I$(INC_DIR) -MMD -MP 
+CFLAGS   := -Weverything -Wno-padded -g #-fsanitize=address
 
 .PHONY: all clean fclean re
 
 all: $(EXE)
 
 $(EXE): $(OBJ) | $(BIN_DIR)
-	$(CC) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -43,6 +43,7 @@ clean:
 fclean: clean
 	rm -rf $(BIN_DIR)
 
-re: fclean all
+re: fclean
+	make all
 
 -include $(OBJ:.o=.d)
