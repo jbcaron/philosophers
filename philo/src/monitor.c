@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 16:47:19 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:52:28 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,8 @@ void	give_permission_eat(t_monitoring *this)
 			this->snap_philos[i].state == THINK &&
 			this->snap_philos[left_id].eat_permission == false &&
 			this->snap_philos[right_id].eat_permission == false &&
-			this->snap_philos[left_id].eat_permission == false &&
-			this->snap_philos[right_id].eat_permission == false &&
+			this->snap_philos[left_id].state != EAT &&
+			this->snap_philos[right_id].state != EAT &&
 			this->snap_philos[i].time_last_meal <= this->snap_philos[left_id].time_last_meal &&
 			this->snap_philos[i].time_last_meal <= this->snap_philos[right_id].time_last_meal)
 		{
