@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 16:52:28 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 17:52:30 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	init_monitor(t_monitoring *this, t_settings param)
 	this->start = _start_monitor;
 	this->maj_snap = _maj_snap;
 	this->one_dead = _one_dead_monitor;
+	this->all_eat = _all_eat_enought;
 	this->stop = _stop_monitor;
 	return (EXIT_SUCCESS);
 }
@@ -206,7 +207,8 @@ void	_stop_monitor(t_monitoring *this)
 bool	_one_dead_monitor(t_monitoring *this)
 {
 	int32_t	nb_philo;
-	int		i;
+	int32_t	i;
+
 	nb_philo = this->prog.param.nb_philo;
 	i = -1;
 	while (++i < nb_philo)
@@ -215,6 +217,23 @@ bool	_one_dead_monitor(t_monitoring *this)
 			return (true);
 	}
 	return (false);
+}
+
+bool	_all_eat_enought(t_monitoring *this)
+{
+	int32_t	nb_philo;
+	int32_t	i;
+
+	if (this->prog.param.nb_meal < 0)
+		return (false);
+	nb_philo = this->prog.param.nb_philo;
+	i = -1;
+	while (++i < nb_philo)
+	{
+		if (this->snap_philos[i].nb_meal < this->prog.param.nb_meal)
+			return (false);
+	}
+	return (true);
 }
 
 void	_maj_snap(t_monitoring *this)
@@ -267,9 +286,6 @@ void	give_permission_eat(t_monitoring *this)
 			this->snap_philos[i].time_last_meal <= this->snap_philos[left_id].time_last_meal &&
 			this->snap_philos[i].time_last_meal <= this->snap_philos[right_id].time_last_meal)
 		{
-printf("------------------------------\n");
-printf("id: %d allow to eat\n", (i + 1));
-printf("------------------------------\n");
 			this->snap_philos[i].eat_permission = true;
 			this->philos[i].allow_eat(&this->philos[i]);
 		}

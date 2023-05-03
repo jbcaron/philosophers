@@ -6,19 +6,13 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:37 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 12:30:30 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:16:35 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "simulation.h"
 #include "utils.h"
-
-void	upon_exit_idle(t_philo *philo, t_prog *prog)
-{
-	(void)prog;
-	philo->new_meal(philo, get_time_ms());
-}
 
 void	upon_enter_eat(t_philo *philo, t_prog *prog)
 {
