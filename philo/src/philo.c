@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 16:44:47 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:04:14 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,24 @@ void	*thread_philo(void *data_thread)
 
 void	routine_philo(t_philo *philo, t_prog *prog)
 {
+	t_state	state;
+
 	while (prog->get_state(prog) != STOP)
 	{
 		g_check_state_philo[philo->get_state(philo)](philo, prog);
+		/*
+		state = philo->get_state(philo);
+		if (state == IDLE)
+			check_idle(philo, prog);
+		if (state == EAT)
+			check_eat(philo, prog);
+		if (state == SLEEP)
+			check_sleep(philo, prog);
+		if (state == THINKING)
+			check_thinking(philo, prog);
+		if (state == DEAD)
+			check_dead(philo, prog);
+		*/
 	}
 	philo->stop(philo);
 }

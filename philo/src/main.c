@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:52:30 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 13:21:35 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:32:19 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,14 @@ static void	monitor_routine(t_monitoring *monitor)
 	monitor->maj_snap(monitor);
 	give_permission_eat(monitor);
 	if (monitor->one_dead(monitor))
+	{
 		monitor->prog.set_state(&monitor->prog, STOP);
+		usleep(10);
+	}
 	prog->event_buf.flush(&prog->event_buf, monitor->start_time);
 }
+
+#if 1
 
 int	main(int argc, char **argv)
 {
@@ -50,3 +55,5 @@ int	main(int argc, char **argv)
 	destroy_monitor(&monitor);
 	return (EXIT_SUCCESS);
 }
+
+#endif

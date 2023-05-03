@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 12:00:37 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:29:28 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@ void	check_idle(t_philo *philo, t_prog *prog)
 	{
 		philo->set_state(philo, THINK);
 		philo->new_meal(philo, get_time_ms());
+		upon_exit_idle(philo, prog);
 		upon_enter_think(philo, prog);
 	}
 }
 
 void	check_eat(t_philo *philo, t_prog *prog)
 {
-	int64_t	time_since_meal;
+	int32_t	time_since_meal;
 
-	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	time_since_meal = (int32_t)(get_time_ms() - philo->get_last_meal(philo));
 	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);
@@ -43,9 +44,9 @@ void	check_eat(t_philo *philo, t_prog *prog)
 
 void	check_sleep(t_philo *philo, t_prog *prog)
 {
-	int64_t	time_since_meal;
+	int32_t	time_since_meal;
 
-	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	time_since_meal = (int32_t)(get_time_ms() - philo->get_last_meal(philo));
 	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);
@@ -60,9 +61,9 @@ void	check_sleep(t_philo *philo, t_prog *prog)
 
 void	check_thinking(t_philo *philo, t_prog *prog)
 {
-	int64_t	time_since_meal;
+	int32_t	time_since_meal;
 
-	time_since_meal = get_time_ms() - philo->get_last_meal(philo);
+	time_since_meal = (int32_t)(get_time_ms() - philo->get_last_meal(philo));
 	if (time_since_meal >= prog->param.time_to_die)
 	{
 		philo->set_state(philo, DEAD);

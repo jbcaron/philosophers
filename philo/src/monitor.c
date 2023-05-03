@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 13:18:40 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:47:19 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	_init_monitor_philo(t_monitoring *this)
 	{
 		if (init_philo(&this->philos[i], i, this))
 		{
-			while (--i)
+			while (--i >= 0)
 				destroy_philo(&this->philos[i]);
 			return (EXIT_FAILURE);
 		}
@@ -66,7 +66,7 @@ int	_init_monitor_mutex(t_monitoring *this)
 	{
 		if (pthread_mutex_init(&this->forks[i], NULL))
 		{
-			while (--i)
+			while (--i >= 0)
 				pthread_mutex_destroy(&this->forks[i]);
 			return (EXIT_FAILURE);
 		}
@@ -77,14 +77,16 @@ int	_init_monitor_mutex(t_monitoring *this)
 int	_init_prog(t_prog *this, t_settings param)
 {
 	this->param = param;
-	this->_state = WAIT;
-	if (init_event_buffer(&this->event_buf, param.nb_philo * 2))
+	if (init_event_buffer(&this->event_buf, param.nb_philo * 4))
 		return (EXIT_FAILURE);
 	if (pthread_mutex_init(&this->_lock_state, NULL))
 	{
 		destroy_event_buffer(&this->event_buf);
 		return (EXIT_FAILURE);
 	}
+	this->_state = WAIT;
+	this->get_state = _get_state_simu;
+	this->set_state = _set_state_simu;
 	return (EXIT_SUCCESS);
 }
 
@@ -116,28 +118,30 @@ void	_destroy_monitor_mutex(t_monitoring *this)
 
 int	init_monitor(t_monitoring *this, t_settings param)
 {
-	if (_init_monitor_memory(this))
+	if (_init_prog(&this->prog, param))
 		return (EXIT_FAILURE);
-	if (_init_monitor_mutex(this))
+	if (_init_monitor_memory(this))
 	{
-		_destroy_monitor_memory(this);
+		_destroy_prog(&this->prog);
 		return (EXIT_FAILURE);
 	}
-	if (_init_prog(&this->prog, param))
+	if (_init_monitor_mutex(this))
 	{
-		_destroy_monitor_mutex(this);
+		_destroy_prog(&this->prog);
 		_destroy_monitor_memory(this);
 		return (EXIT_FAILURE);
 	}
 	if (_init_monitor_philo(this))
 	{
+		_destroy_prog(&this->prog);
 		_destroy_monitor_mutex(this);
 		_destroy_monitor_memory(this);
-		_destroy_prog(&this->prog);
 		return (EXIT_FAILURE);
 	}
 	this->start = _start_monitor;
 	this->maj_snap = _maj_snap;
+	this->one_dead = _one_dead_monitor;
+	this->stop = _stop_monitor;
 	return (EXIT_SUCCESS);
 }
 
@@ -146,6 +150,23 @@ void	destroy_monitor(t_monitoring *this)
 	_destroy_monitor_mutex(this);
 	_destroy_monitor_memory(this);
 	_destroy_prog(&this->prog);
+}
+
+void	_set_state_simu(t_prog *this, t_simu state)
+{
+	pthread_mutex_lock(&this->_lock_state);
+	this->_state = state;
+	pthread_mutex_unlock(&this->_lock_state);
+}
+
+t_simu	_get_state_simu(t_prog *this)
+{
+	t_simu	state;
+
+	pthread_mutex_lock(&this->_lock_state);
+	state = this->_state;
+	pthread_mutex_unlock(&this->_lock_state);
+	return (state);
 }
 
 int	_start_monitor(t_monitoring *this)
@@ -160,7 +181,7 @@ int	_start_monitor(t_monitoring *this)
 		if (pthread_create(&this->threads[i], NULL, thread_philo, (void *)(&this->philos[i])))
 		{
 			this->prog.set_state(&this->prog, STOP);
-			while (--i)
+			while (--i >= 0)
 				pthread_join(this->threads[i], NULL);
 			return (EXIT_FAILURE);
 		}
@@ -186,15 +207,14 @@ bool	_one_dead_monitor(t_monitoring *this)
 {
 	int32_t	nb_philo;
 	int		i;
-
 	nb_philo = this->prog.param.nb_philo;
 	i = -1;
 	while (++i < nb_philo)
 	{
 		if (this->snap_philos[i].state == DEAD)
-			return (false);
+			return (true);
 	}
-	return (true);
+	return (false);
 }
 
 void	_maj_snap(t_monitoring *this)
@@ -242,9 +262,14 @@ void	give_permission_eat(t_monitoring *this)
 			this->snap_philos[i].state == THINK &&
 			this->snap_philos[left_id].eat_permission == false &&
 			this->snap_philos[right_id].eat_permission == false &&
-			this->snap_philos[i].time_last_meal >= this->snap_philos[left_id].time_last_meal &&
-			this->snap_philos[i].time_last_meal >= this->snap_philos[right_id].time_last_meal)
+			this->snap_philos[left_id].eat_permission == false &&
+			this->snap_philos[right_id].eat_permission == false &&
+			this->snap_philos[i].time_last_meal <= this->snap_philos[left_id].time_last_meal &&
+			this->snap_philos[i].time_last_meal <= this->snap_philos[right_id].time_last_meal)
 		{
+printf("------------------------------\n");
+printf("id: %d allow to eat\n", (i + 1));
+printf("------------------------------\n");
 			this->snap_philos[i].eat_permission = true;
 			this->philos[i].allow_eat(&this->philos[i]);
 		}

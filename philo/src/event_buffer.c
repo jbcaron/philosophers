@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 08:33:56 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 15:56:15 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	init_event_buffer(t_event_buffer *this, size_t size)
 	this->_size = size;
 	this->_head = 0;
 	this->_tail = 0;
-	if (pthread_mutex_init(&this->_lock, NULL) < 0)
+	this->_full = false;
+	this->push = _push_event_buffer;
+	this->flush = _flush_event_buffer;
+	if (pthread_mutex_init(&this->_lock, NULL))
 	{
 		free(this->_events);
 		return (EXIT_FAILURE);
@@ -64,20 +67,21 @@ void	destroy_event_buffer(t_event_buffer *this)
  * full.
  */
 
-bool	push_event_buffer(t_event_buffer *this, t_event	*event)
+bool	_push_event_buffer(t_event_buffer *this, t_event *event)
 {
 	size_t	i;
 
 	pthread_mutex_lock(&this->_lock);
-	i = (this->_head + 1) % this->_size;
-	if (i == this->_tail)
+	if (this->_full)
 	{
-		pthread_mutex_lock(&this->_lock);
+		pthread_mutex_unlock(&this->_lock);
 		return (false);
 	}
-	this->_events[i] = *event;
-	this->_tail = i;
-	pthread_mutex_lock(&this->_lock);
+	i = (this->_head + 1) % this->_size;
+	this->_full = (i == this->_tail);
+	this->_events[this->_head] = *event;
+	this->_head = i;
+	pthread_mutex_unlock(&this->_lock);
 	return (true);
 }
 
@@ -87,23 +91,24 @@ bool	push_event_buffer(t_event_buffer *this, t_event	*event)
  * @param this Pointer to the event buffer structure.
  * @param event Pointer to the event structure to store the pulled event.
  * @return true if an event is pulled successfully; false if the buffer is
- * full.
+ * empty.
  */
 
-bool	pull_event_buffer(t_event_buffer *this, t_event	*event)
+bool	_pull_event_buffer(t_event_buffer *this, t_event *event)
 {
 	size_t	i;
 
 	pthread_mutex_lock(&this->_lock);
-	i = (this->_tail + 1) % this->_size;
-	if (i == this->_head)
+	if ((this->_tail == this->_head) && !this->_full)
 	{
-		pthread_mutex_lock(&this->_lock);
+		pthread_mutex_unlock(&this->_lock);
 		return (false);
 	}
+	this->_full = false;
+	i = (this->_tail + 1) % this->_size;
 	*event = this->_events[this->_tail];
 	this->_tail = (this->_tail + 1) % this->_size;
-	pthread_mutex_lock(&this->_lock);
+	pthread_mutex_unlock(&this->_lock);
 	return (true);
 }
 
@@ -121,13 +126,34 @@ static const char	*g_action[] = {
  * @param this Pointer to the event buffer structure.
  */
 
-void	flush_event_buffer(t_event_buffer *this, uint64_t start_time)
+void	_flush_event_buffer(t_event_buffer *this, uint64_t start_time)
 {
 	t_event	event;
 
-	while (this->_pull(this, &event))
+	while (_pull_event_buffer(this, &event))
 	{
-		printf("%ld %d %s\n", event.timestamp - start_time, event.philo_id + 1,
-			g_action[event.type]);
+		printf("%lu %d %s\n", (event.timestamp - start_time), (event.philo_id + 1), g_action[event.type]);
 	}
 }
+
+#if 0
+
+int	main()
+{
+	t_event_buffer	buf;
+	uint64_t		start_time = get_time_ms();
+	sleep(1);
+	t_event			event = {get_time_ms(), 1, EATING};
+
+	init_event_buffer(&buf, 5);
+	while (_push_event_buffer(&buf, &event))
+		event.philo_id++;
+	_flush_event_buffer(&buf, start_time);
+	sleep(1);
+	event.timestamp = get_time_ms();
+	while (_push_event_buffer(&buf, &event))
+		event.philo_id++;
+	_flush_event_buffer(&buf, start_time);
+}
+
+#endif

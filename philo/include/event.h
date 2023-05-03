@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:41 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 13:24:25 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 15:46:23 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ typedef struct s_event_buffer
 	size_t			_head;
 	size_t			_tail;
 	pthread_mutex_t	_lock;
-	int				(*push)(struct s_event_buffer *, t_event *);
-	bool			(*_pull)(struct s_event_buffer *, t_event *);
+	bool			(*push)(struct s_event_buffer *, t_event *);
 	void			(*flush)(struct s_event_buffer *, uint64_t);
+	bool			_full;
 }	t_event_buffer;
 
-int		init_event_buffer(t_event_buffer *this, size_t size);
-void	destroy_event_buffer(t_event_buffer *this);
-bool	push_event_buffer(t_event_buffer *this, t_event	*event);
-bool	pull_event_buffer(t_event_buffer *this, t_event	*event);
-void	flush_event_buffer(t_event_buffer *this, uint64_t start_time);
+int		init_event_buffer(struct s_event_buffer *this, size_t size);
+void	destroy_event_buffer(struct s_event_buffer *this);
+bool	_push_event_buffer(struct s_event_buffer *this, struct s_event *event);
+bool	_pull_event_buffer(struct s_event_buffer *this, struct s_event *event);
+void	_flush_event_buffer(struct s_event_buffer *this, uint64_t start_time);
 
 #endif

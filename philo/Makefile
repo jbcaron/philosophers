@@ -6,7 +6,7 @@
 #    By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 13:18:42 by jcaron            #+#    #+#              #
-#    Updated: 2023/05/02 16:13:55 by jcaron           ###   ########.fr        #
+#    Updated: 2023/05/03 16:22:43 by jcaron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC       := clang
 CPPFLAGS := -I$(INC_DIR) -MMD -MP 
-CFLAGS   := -Weverything -Wno-padded -g #-fsanitize=address
+CFLAGS   := -Wall -Wextra -g #-fsanitize=address
 
 .PHONY: all clean fclean re
 

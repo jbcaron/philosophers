@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 11:58:04 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:28:34 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	init_philo(t_philo *this, uint32_t id, t_monitoring *data)
 	this->allow_eat = _allow_eat_philo;
 	this->can_eat = _can_eat_philo;
 	this->pickup_forks = _pickup_forks_philo;
+	this->drop_forks = _drop_forks_philo;
 	this->new_meal = _new_meal_philo;
 	this->stop = _stop_philo;
 	if (pthread_mutex_init(&this->_lock_data, NULL))
@@ -92,12 +93,12 @@ void	_allow_eat_philo(t_philo *this)
 
 bool	_can_eat_philo(t_philo *this)
 {
-	bool	can_eat;
+	bool	allow_eat;
 
 	pthread_mutex_lock(&this->_lock_data);
-	can_eat = this->_eat_permission;
+	allow_eat = this->_eat_permission;
 	pthread_mutex_unlock(&this->_lock_data);
-	return (can_eat);
+	return (allow_eat);
 }
 
 void	_pickup_forks_philo(t_philo *this, t_prog *prog)
@@ -109,9 +110,15 @@ void	_pickup_forks_philo(t_philo *this, t_prog *prog)
 	pthread_mutex_lock(this->_left_fork);
 	event.timestamp = get_time_ms();
 	prog->event_buf.push(&prog->event_buf, &event);
-	pthread_mutex_lock(this->_left_fork);
+	pthread_mutex_lock(this->_right_fork);
 	event.timestamp = get_time_ms();
 	prog->event_buf.push(&prog->event_buf, &event);
+}
+
+void	_drop_forks_philo(t_philo *this)
+{
+	pthread_mutex_unlock(this->_left_fork);
+	pthread_mutex_unlock(this->_right_fork);
 }
 
 void	_new_meal_philo(t_philo *this, uint64_t time)
@@ -119,7 +126,7 @@ void	_new_meal_philo(t_philo *this, uint64_t time)
 	pthread_mutex_lock(&this->_lock_data);
 	this->_last_meal_time = time;
 	++this->_nb_meal;
-	this->can_eat = false;
+	this->_eat_permission = false;
 	pthread_mutex_unlock(&this->_lock_data);
 }
 
