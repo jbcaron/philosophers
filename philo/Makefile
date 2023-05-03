@@ -6,7 +6,7 @@
 #    By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 13:18:42 by jcaron            #+#    #+#              #
-#    Updated: 2023/05/03 19:28:45 by jcaron           ###   ########.fr        #
+#    Updated: 2023/05/03 19:40:02 by jcaron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,22 @@ BIN_DIR := bin
 INC_DIR := include
 
 EXE := $(BIN_DIR)/philo
-SRC := $(wildcard $(SRC_DIR)/*.c)
-#SRC := $(SRC_DIR)/
+#SRC := $(wildcard $(SRC_DIR)/*.c)
+SRC := $(SRC_DIR)/event_buffer.c \
+       $(SRC_DIR)/main.c \
+       $(SRC_DIR)/monitor_1.c \
+       $(SRC_DIR)/monitor_2.c \
+       $(SRC_DIR)/monitor_3.c \
+       $(SRC_DIR)/monitor_4.c \
+       $(SRC_DIR)/parse_arg.c \
+       $(SRC_DIR)/philo.c \
+       $(SRC_DIR)/philo_methods_1.c \
+       $(SRC_DIR)/philo_methods_2.c \
+       $(SRC_DIR)/philo_methods_3.c \
+       $(SRC_DIR)/philo_state_machine_actions.c \
+       $(SRC_DIR)/philo_state_machine_check.c \
+       $(SRC_DIR)/utils_1.c \
+       $(SRC_DIR)/utils_2.c
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC       := clang
