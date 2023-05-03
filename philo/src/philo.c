@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:05:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 18:14:50 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:46:34 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "simulation.h"
 #include "error.h"
 
+/*
 static void	(*g_check_state_philo[5])(t_philo*, t_prog*) = {
 	check_idle,
 	check_eat,
@@ -22,6 +23,9 @@ static void	(*g_check_state_philo[5])(t_philo*, t_prog*) = {
 	check_thinking,
 	check_dead
 };
+function in routine:
+	g_check_state_philo[philo->get_state(philo)](philo, prog);
+*/
 
 void	*thread_philo(void *data_thread)
 {
@@ -38,8 +42,6 @@ void	routine_philo(t_philo *philo, t_prog *prog)
 
 	while (prog->get_state(prog) != STOP)
 	{
-		g_check_state_philo[philo->get_state(philo)](philo, prog);
-		/*
 		state = philo->get_state(philo);
 		if (state == IDLE)
 			check_idle(philo, prog);
@@ -51,7 +53,6 @@ void	routine_philo(t_philo *philo, t_prog *prog)
 			check_thinking(philo, prog);
 		if (state == DEAD)
 			check_dead(philo, prog);
-		*/
 	}
 	philo->stop(philo);
 }

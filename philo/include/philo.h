@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:06:03 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 16:47:41 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:52:07 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef enum e_state
 	SLEEP,
 	THINK,
 	DEAD,
-	//ERROR
 }	t_state;
 
 typedef struct s_snap_philo
@@ -61,7 +60,8 @@ typedef struct s_philo
 	void			(*stop)(struct s_philo *);
 }	t_philo;
 
-int					init_philo(struct s_philo *this, uint32_t id, struct s_monitoring *data);
+int					init_philo(struct s_philo *this, uint32_t id, struct \
+						s_monitoring *data);
 void				destroy_philo(struct s_philo *this);
 enum e_state		_get_state_philo(struct s_philo *this);
 enum e_state		_set_state_philo(struct s_philo *this, enum e_state state);
@@ -69,7 +69,8 @@ uint64_t			_get_last_meal_philo(struct s_philo *this);
 struct s_snap_philo	_get_snap_philo(struct s_philo *this);
 void				_allow_eat_philo(struct s_philo *this);
 bool				_can_eat_philo(t_philo *this);
-void				_pickup_forks_philo(struct s_philo *this, struct s_prog *prog);
+void				_pickup_forks_philo(struct s_philo *this, \
+						struct s_prog *prog);
 void				_drop_forks_philo(t_philo *this);
 void				_new_meal_philo(struct s_philo *this, uint64_t time);
 void				_stop_philo(struct s_philo *this);
@@ -85,9 +86,10 @@ void				check_dead(struct s_philo *philo, struct s_prog *prog);
 
 void				upon_exit_idle(struct s_philo *philo, struct s_prog *prog);
 void				upon_enter_eat(struct s_philo *philo, struct s_prog *prog);
-void				upon_enter_sleep(struct s_philo *philo, struct s_prog *prog);
-void				upon_enter_think(struct s_philo *philo, struct s_prog *prog);
+void				upon_enter_sleep(struct s_philo *philo, \
+						struct s_prog *prog);
+void				upon_enter_think(struct s_philo *philo, \
+						struct s_prog *prog);
 void				upon_enter_dead(struct s_philo *philo, struct s_prog *prog);
-
 
 #endif

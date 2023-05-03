@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 13:52:40 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 15:56:15 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:48:02 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,28 +132,7 @@ void	_flush_event_buffer(t_event_buffer *this, uint64_t start_time)
 
 	while (_pull_event_buffer(this, &event))
 	{
-		printf("%lu %d %s\n", (event.timestamp - start_time), (event.philo_id + 1), g_action[event.type]);
+		printf("%lu %d %s\n", (event.timestamp - start_time), \
+			(event.philo_id + 1), g_action[event.type]);
 	}
 }
-
-#if 0
-
-int	main()
-{
-	t_event_buffer	buf;
-	uint64_t		start_time = get_time_ms();
-	sleep(1);
-	t_event			event = {get_time_ms(), 1, EATING};
-
-	init_event_buffer(&buf, 5);
-	while (_push_event_buffer(&buf, &event))
-		event.philo_id++;
-	_flush_event_buffer(&buf, start_time);
-	sleep(1);
-	event.timestamp = get_time_ms();
-	while (_push_event_buffer(&buf, &event))
-		event.philo_id++;
-	_flush_event_buffer(&buf, start_time);
-}
-
-#endif

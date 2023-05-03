@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 18:16:41 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:28:30 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	check_sleep(t_philo *philo, t_prog *prog)
 		philo->set_state(philo, DEAD);
 		upon_enter_dead(philo, prog);
 	}
-	else if (time_since_meal >= (prog->param.time_to_eat + prog->param.time_to_eat))
+	else if (time_since_meal >= (prog->param.time_to_eat + \
+		prog->param.time_to_eat))
 	{
 		philo->set_state(philo, THINK);
 		upon_enter_think(philo, prog);

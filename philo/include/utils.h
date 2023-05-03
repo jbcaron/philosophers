@@ -6,16 +6,16 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:03:45 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 13:21:41 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/03 18:47:06 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
+# include <stdlib.h>
+# include <stdint.h>
+# include <stdbool.h>
 
 size_t		ft_strlen(const char *str);
 int			ft_strcmp(const char *s1, const char *s2);
