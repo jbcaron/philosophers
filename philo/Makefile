@@ -6,7 +6,7 @@
 #    By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 13:18:42 by jcaron            #+#    #+#              #
-#    Updated: 2023/05/04 16:34:35 by jcaron           ###   ########.fr        #
+#    Updated: 2023/05/04 17:09:16 by jcaron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC       := clang
 CPPFLAGS := -I$(INC_DIR) -MMD -MP 
-CFLAGS   := -Wall -Wextra -Werror -O2
-#CFLAGS   := -Wall -Wextra -O2 -g -fsanitize=thread
+#CFLAGS   := -Wall -Wextra -Werror -O2
+CFLAGS   := -Wall -Wextra -O2 -g -fsanitize=thread
 
 .PHONY: all clean fclean re
 

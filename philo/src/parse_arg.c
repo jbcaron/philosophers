@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:14:28 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/02 08:48:42 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:58:50 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "simulation.h"
 
-#define ARG_MAX "100000000"
+#define ARG_MAX "1000000000"
 
 static bool	is_valid_arg(char *arg)
 {

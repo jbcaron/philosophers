@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/04 14:07:48 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:52:55 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_monitoring
 	bool				(*one_dead)(struct s_monitoring *);
 	bool				(*all_eat)(struct s_monitoring *);
 	void				(*stop)(struct s_monitoring *);
-
 }	t_monitoring;
 
 int		_init_monitor_memory(struct s_monitoring *this);

@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/04 16:14:58 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 17:25:05 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,16 @@ void	_pickup_forks_philo(t_philo *this, t_prog *prog)
 
 	event.philo_id = this->id;
 	event.type = TAKE_FORK;
-	pthread_mutex_lock(this->_left_fork);
+	if (this->id % 2)
+		pthread_mutex_lock(this->_left_fork);
+	else
+		pthread_mutex_lock(this->_right_fork);
 	event.timestamp = get_time_ms();
 	prog->event_buf.push(&prog->event_buf, &event);
-	pthread_mutex_lock(this->_right_fork);
+	if (this->id % 2)
+		pthread_mutex_lock(this->_right_fork);
+	else
+		pthread_mutex_lock(this->_left_fork);
 	event.timestamp = get_time_ms();
 	prog->event_buf.push(&prog->event_buf, &event);
 }
@@ -63,5 +69,7 @@ void	_drop_forks_philo(t_philo *this)
 {
 	pthread_mutex_unlock(this->_left_fork);
 	pthread_mutex_unlock(this->_right_fork);
+	pthread_mutex_lock(&this->_lock_data);
 	this->_eat_permission = false;
+	pthread_mutex_unlock(&this->_lock_data);
 }
