@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:11:52 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 17:46:22 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 14:07:48 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_prog
 	pthread_mutex_t			_lock_state;
 	t_simu					(*get_state)(struct s_prog *);
 	void					(*set_state)(struct s_prog *, t_simu);
+	uint64_t				start_time;
 	enum e_simu				_state;
 }	t_prog;
 
@@ -52,7 +53,6 @@ typedef struct s_monitoring
 	struct s_snap_philo	*snap_philos;
 	pthread_t			*threads;
 	pthread_mutex_t		*forks;
-	uint64_t			start_time;
 	int					(*start)(struct s_monitoring *);
 	void				(*maj_snap)(struct s_monitoring *);
 	bool				(*one_dead)(struct s_monitoring *);

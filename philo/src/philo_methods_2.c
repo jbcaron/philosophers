@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 19:27:57 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:14:58 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ void	_drop_forks_philo(t_philo *this)
 {
 	pthread_mutex_unlock(this->_left_fork);
 	pthread_mutex_unlock(this->_right_fork);
+	this->_eat_permission = false;
 }

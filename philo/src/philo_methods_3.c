@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:10:22 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 19:26:48 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:15:00 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	_new_meal_philo(t_philo *this, uint64_t time)
 	pthread_mutex_lock(&this->_lock_data);
 	this->_last_meal_time = time;
 	++this->_nb_meal;
-	this->_eat_permission = false;
 	pthread_mutex_unlock(&this->_lock_data);
 }
 

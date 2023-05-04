@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 19:30:41 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:34:22 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void	give_permission_eat(t_monitoring *this)
 	{
 		left_id = (i + nb_philo - 1) % nb_philo;
 		right_id = (i + 1) % nb_philo;
-		if (!snap[i].eat_permission && snap[i].state == THINK && \
-			!snap[left_id].eat_permission && !snap[right_id].eat_permission && \
-			snap[left_id].state != EAT && snap[right_id].state != EAT && \
+		if ((snap[i].state == THINK || snap[i].state == IDLE) && \
+			!snap[i].eat_permission && !snap[left_id].eat_permission && \
+			!snap[right_id].eat_permission && \
 			snap[i].time_last_meal <= snap[left_id].time_last_meal && \
 			snap[i].time_last_meal <= snap[right_id].time_last_meal)
 		{
@@ -87,3 +87,12 @@ void	give_permission_eat(t_monitoring *this)
 		}
 	}
 }
+
+/*
+printf("------------------------------------------------------------------\n");
+printf("id: %d, %lu | %lu | %lu\n", (i + 1),
+	(snap[left_id].time_last_meal - this->prog.start_time), \
+	(snap[i].time_last_meal - this->prog.start_time), \
+	(snap[right_id].time_last_meal - this->prog.start_time));
+printf("------------------------------------------------------------------\n");
+*/

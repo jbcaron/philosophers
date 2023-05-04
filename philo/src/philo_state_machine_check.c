@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:20:24 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 18:28:30 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 15:09:27 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	check_idle(t_philo *philo, t_prog *prog)
 	if (prog->get_state(prog) == START)
 	{
 		philo->set_state(philo, THINK);
-		philo->new_meal(philo, get_time_ms());
 		upon_enter_think(philo, prog);
 	}
 }

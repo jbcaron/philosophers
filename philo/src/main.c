@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:52:30 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 18:27:25 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 14:10:09 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	monitor_routine(t_monitoring *monitor)
 	{
 		monitor->prog.set_state(&monitor->prog, STOP);
 	}
-	prog->event_buf.flush(&prog->event_buf, monitor->start_time);
+	prog->event_buf.flush(&prog->event_buf, monitor->prog.start_time);
 }
 
 int	main(int argc, char **argv)

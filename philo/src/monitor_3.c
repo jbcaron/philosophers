@@ -6,7 +6,7 @@
 /*   By: jcaron <jcaron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:09:18 by jcaron            #+#    #+#             */
-/*   Updated: 2023/05/03 19:30:33 by jcaron           ###   ########.fr       */
+/*   Updated: 2023/05/04 16:23:58 by jcaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ int	_start_monitor(t_monitoring *this)
 			return (EXIT_FAILURE);
 		}
 	}
-	this->start_time = get_time_ms();
+	i = -1;
+	this->prog.start_time = get_time_ms();
+	while (++i < nb_philo)
+		this->philos[i]._last_meal_time = this->prog.start_time;
 	this->prog.set_state(&this->prog, START);
 	return (EXIT_SUCCESS);
 }
